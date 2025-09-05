@@ -30,35 +30,24 @@ for this repository:
 def parseOptions():
     """parse commandline parameters"""
     parser = argparse.ArgumentParser(description="""verify_schema.py""")
-    parser.add_argument("--schema",
+    parser.add_argument("--schema", nargs='+',
                         default="eduperson_schema_parseable.json")
     parser.add_argument("--scim",
                         default="eduperson_SCIM_example_parseable.json")
     return parser.parse_args()
 
 
-# def load_json_schemas(filenames: list):
-#     print("--------------------------------------")
-#     retval = {}
-#     for filename in filenames:
-#         print(F"loading {filename}")
-#         temp = load_json_schema(filename)
-#         print("--------------------------------------")
-#         pprint(temp)
-#         print(F"type: {type(temp)}")
-#         print("--------------------------------------")
-#         print(F"keys: {temp.keys()}")
-#         print("--------------------------------------")
-#         for key in temp.keys():
-#             retval[key]=temp
-#     pprint(retval)
-#
-#
-#     return retval
 def load_json_schemas(filenames: list):
     """directly load a schema by filename"""
     retval = {}
     for filename in filenames:
+
+        if not os.path.exists(filename):
+            print(
+                f"Cannot find {filename}.json."
+            )
+            sys.exit(3)
+
         with open(filename) as f:
             schema = Model.load(f)
             retval[schema.id] = schema
@@ -85,17 +74,14 @@ def load_json_data(filename):
 
 
 args = parseOptions()
-schema_file = args.schema
+
+print(F"schema file(s): {args.schema}")
+
+schema_files = args.schema
 scim_file = args.scim
 
-if not os.path.exists(schema_file) and args.schema == "Schema_Parseable.json":
-    print(
-        f"Cannot find {schema_file}.json."
-    )
-    sys.exit(3)
 
-scim_schema = load_json_schema(schema_file)
-print(F"Loaded schema: {schema_file}")
+scim_schema = load_json_schemas(schema_files)
 scim_data = load_json_data(scim_file)
 print(F"Loaded SCIM data: {scim_file}")
 
