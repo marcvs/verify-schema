@@ -6,8 +6,6 @@ import sys
 import json
 import argparse
 
-from pprint import pprint
-
 sys.path.append(os.getcwd())
 try:
     from scimschema import validate
@@ -75,7 +73,7 @@ def load_json_data(filename):
 
 args = parseOptions()
 
-print(F"schema file(s): {args.schema}")
+# print(F"schema file(s): {args.schema}")
 
 schema_files = args.schema
 scim_file = args.scim
@@ -83,7 +81,7 @@ scim_file = args.scim
 
 scim_schema = load_json_schemas(schema_files)
 scim_data = load_json_data(scim_file)
-print(F"Loaded SCIM data: {scim_file}")
+# print(F"Loaded SCIM data: {scim_file}")
 
 try:
     validate(data=scim_data, extension_schema_definitions=scim_schema)
