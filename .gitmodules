@@ -1,0 +1,3 @@
+[submodule "scimschema"]
+	path = scimschema
+	url = git@github.com:GordonSo/scimschema.git
